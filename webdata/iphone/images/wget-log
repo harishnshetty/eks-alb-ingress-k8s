@@ -1,0 +1,7 @@
+--2025-08-19 17:06:21--  https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp16-spacegray-select-202310?wid=1200
+Resolving store.storeimages.cdn-apple.com (store.storeimages.cdn-apple.com)... 2600:140f:ac00:1a2::1477, 2600:140f:ac00:1a0::1477, 23.37.245.120
+Connecting to store.storeimages.cdn-apple.com (store.storeimages.cdn-apple.com)|2600:140f:ac00:1a2::1477|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+Cookie coming from store.storeimages.cdn-apple.com attempted to set domain to ucp5-as-images.apple.com
+2025-08-19 17:06:22 ERROR 404: Not Found.
+

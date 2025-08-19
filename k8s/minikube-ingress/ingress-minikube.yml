@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: store-ingress
+  namespace: store-ns
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: store.local   # 👈 custom host (you'll map it in /etc/hosts)
+      http:
+        paths:
+          - path: /android
+            pathType: Prefix
+            backend:
+              service:
+                name: android-service
+                port:
+                  number: 80
+          - path: /iphone
+            pathType: Prefix
+            backend:
+              service:
+                name: iphone-service
+                port:
+                  number: 80
+          - path: /laptop
+            pathType: Prefix
+            backend:
+              service:
+                name: laptop-service
+                port:
+                  number: 80

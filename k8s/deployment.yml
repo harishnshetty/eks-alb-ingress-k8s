@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: android-deployment
+  namespace: store-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: android
+  template:
+    metadata:
+      labels:
+        app: android
+    spec:
+      containers:
+        - name: android-container
+          image: harishnshetty/android:v1
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iphone-deployment
+  namespace: store-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: iphone
+  template:
+    metadata:
+      labels:
+        app: iphone
+    spec:
+      containers:
+        - name: iphone-container
+          image: harishnshetty/iphone:v1
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laptop-deployment
+  namespace: store-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: laptop
+  template:
+    metadata:
+      labels:
+        app: laptop
+    spec:
+      containers:
+        - name: laptop-container
+          image: harishnshetty/laptop:v1
+          ports:
+            - containerPort: 80

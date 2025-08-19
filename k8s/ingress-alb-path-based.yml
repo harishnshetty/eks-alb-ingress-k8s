@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: store-ingress
+  namespace: store-ns
+  annotations:
+    # Use AWS ALB Ingress Controller
+    kubernetes.io/ingress.class: alb
+
+    # Internet-facing ALB
+    alb.ingress.kubernetes.io/scheme: internet-facing
+
+    # Listen on HTTPS
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
+
+    # Redirect HTTP → HTTPS
+    alb.ingress.kubernetes.io/actions.ssl-redirect: >
+      {"Type":"redirect","RedirectConfig":{"Protocol":"HTTPS","Port":"443","StatusCode":"HTTP_301"}}
+
+    # TLS ACM Certificate ARN
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:123456789012:certificate/your-certificate-id
+
+    # Target type for pods
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  rules:
+    - http:
+        paths:
+          # Redirect all HTTP to HTTPS
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
+
+          # Android store route
+          - path: /android/*
+            pathType: Prefix
+            backend:
+              service:
+                name: android-service
+                port:
+                  number: 80
+
+          # iPhone store route
+          - path: /iphone/*
+            pathType: Prefix
+            backend:
+              service:
+                name: iphone-service
+                port:
+                  number: 80
+
+          # Laptop store route
+          - path: /laptop/*
+            pathType: Prefix
+            backend:
+              service:
+                name: laptop-service
+                port:
+                  number: 80

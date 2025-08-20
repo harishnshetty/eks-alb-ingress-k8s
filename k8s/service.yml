@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: android-service
   namespace: store-ns
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
 spec:
   selector:
     app: android

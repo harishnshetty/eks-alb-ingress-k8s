@@ -1,33 +1,192 @@
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: store-ns
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iphone-deployment
+  namespace: store-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iphone
+  template:
+    metadata:
+      labels:
+        app: iphone 
+    spec:
+      containers:
+      - name: iphone-container
+        image: harishnshetty/iphone:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iphone-service
+  namespace: store-ns
+spec:
+  selector:
+    app: iphone
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: android-deployment
+  namespace: store-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: android
+  template:
+    metadata:
+      labels:
+        app: android
+    spec:
+      containers:
+      - name: iphone-container
+        image: harishnshetty/android:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  android-service
+  namespace: store-ns
+spec:
+  selector:
+    app: android
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laptop-deployment
+  namespace: store-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laptop
+  template:
+    metadata:
+      labels:
+        app: laptop
+    spec:
+      containers:
+      - name: iphone-container
+        image: harishnshetty/laptop:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  laptop-service
+  namespace: store-ns
+spec:
+  selector:
+    app: laptop
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80    
+
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: store-ingress
+  name: myingress
   namespace: store-ns
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  labels:
+    app.kubernetes.io/name: myingress
 spec:
   rules:
-    - host: store.local   # 👈 custom host (you'll map it in /etc/hosts)
-      http:
-        paths:
-          - path: /android
-            pathType: Prefix
-            backend:
-              service:
-                name: android-service
-                port:
-                  number: 80
-          - path: /iphone
-            pathType: Prefix
-            backend:
-              service:
-                name: iphone-service
-                port:
-                  number: 80
-          - path: /laptop
-            pathType: Prefix
-            backend:
-              service:
-                name: laptop-service
-                port:
-                  number: 80
+  - host: iphone.harish.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: iphone-service
+            port: 
+              number: 80
+
+  - host: android.harish.com
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: android-service
+            port:
+              number: 80
+
+  - host: laptop.harish.com
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: laptop-service
+            port:
+              number: 80            
+
+# ---
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   name: nginx-servicemonitor
+#   namespace: monitoring
+#   labels:
+#     release: prometheus
+# spec:
+#   selector:
+#     matchLabels:
+#       app: myapp
+#   namespaceSelector:
+#     matchNames:
+#       - myapp
+#   endpoints:
+#   - port: metrics
+#     path: /metrics
+#     interval: 30s
+
+

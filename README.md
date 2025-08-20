@@ -188,7 +188,9 @@ kubectl get deployment -n kube-system aws-load-balancer-controller
 ## 12. Create and Set Namespace for Your Application
 
 ```bash
-kubectl apply -f 01-ns.yaml
+kubectl apply -f namespace.yml
+kubectl apply -f deployment.yml
+kubectl apply -f ingress-alb-80-without-acm.yml
 kubectl config set-context --current --namespace=store-ns
 ```
 

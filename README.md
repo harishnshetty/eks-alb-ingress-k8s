@@ -77,7 +77,7 @@ sudo apt-get install helm
 ## 5. AWS CLI Configuration
 
 ```bash
-aws configure --profile harish
+aws configure
 ```
 ```bash
 aws configure list

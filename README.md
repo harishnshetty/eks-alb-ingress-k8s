@@ -88,7 +88,8 @@ aws configure
 eksctl create cluster \
   --name my-cluster \
   --region ap-south-1 \
-  --version 1.33
+  --version 1.33 \
+  --without-nodegroup
 
 eksctl create nodegroup \
   --cluster my-cluster \

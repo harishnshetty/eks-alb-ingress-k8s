@@ -77,9 +77,11 @@ sudo apt-get install helm
 ## 5. AWS CLI Configuration
 
 ```bash
-aws configure
+aws configure --profile harish
 ```
-
+```bash
+aws configure list
+```
 ---
 
 ## 6. Create EKS Cluster and Nodegroup
